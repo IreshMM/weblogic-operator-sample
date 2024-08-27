@@ -1,0 +1,163 @@
+@ECHO OFF
+@rem **************************************************************************
+@rem createDomain.cmd
+@rem
+@rem Copyright (c) 2017, 2024, Oracle and/or its affiliates.
+@rem Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+@rem
+@rem     NAME
+@rem       createDomain.cmd - WLS Deploy tool to create empty domains.
+@rem
+@rem     DESCRIPTION
+@rem       This script creates domains with basic servers, clusters, and
+@rem       machine configuration as specified by the model and the domain
+@rem       templates.  Any domain types requiring RCU schemas will require
+@rem       the RCU schemas to exist before running this script.
+@rem
+@rem This script uses the following variables:
+@rem
+@rem JAVA_HOME             - The location of the JDK to use.  The caller must set
+@rem                         this variable to a valid Java 7 (or later) JDK.
+@rem
+@rem WLSDEPLOY_PROPERTIES  - Extra system properties to pass to WLST.  The caller
+@rem                         can use this environment variable to add additional
+@rem                         system properties to the WLST environment.
+@rem
+
+SETLOCAL
+
+SET WLSDEPLOY_PROGRAM_NAME=createDomain
+
+SET SCRIPT_NAME=%~nx0
+SET SCRIPT_ARGS=%*
+SET SCRIPT_PATH=%~dp0
+FOR %%i IN ("%SCRIPT_PATH%") DO SET SCRIPT_PATH=%%~fsi
+IF %SCRIPT_PATH:~-1%==\ SET SCRIPT_PATH=%SCRIPT_PATH:~0,-1%
+
+call "%SCRIPT_PATH%\shared.cmd" :checkArgs %SCRIPT_ARGS%
+SET RETURN_CODE=%ERRORLEVEL%
+if %RETURN_CODE% NEQ 0 (
+  GOTO done
+)
+
+@rem required Java version and patch level is dependent on use of encryption.
+@rem later versions of JDK 7 support encryption so let WDT figure it out.
+SET MIN_JDK_VERSION=7
+call "%SCRIPT_PATH%\shared.cmd" :javaSetup %MIN_JDK_VERSION%
+SET RETURN_CODE=%ERRORLEVEL%
+if %RETURN_CODE% NEQ 0 (
+  GOTO done
+)
+
+call "%SCRIPT_PATH%\shared.cmd" :runWlst create.py
+SET RETURN_CODE=%ERRORLEVEL%
+
+:done
+set SHOW_USAGE=false
+if %RETURN_CODE% == 100 set SHOW_USAGE=true
+if %RETURN_CODE% == 99 set SHOW_USAGE=true
+if "%SHOW_USAGE%" == "false" (
+    GOTO exit_script
+)
+
+:usage
+ECHO.
+ECHO Usage: %SCRIPT_NAME% [-help] [-use_encryption] [-run_rcu]
+ECHO              [-oracle_home ^<oracle_home^>]
+ECHO              -model_file ^<model_file^>
+ECHO              ^<-domain_parent ^<domain_parent^> ^| -domain_home ^<domain_home^>^>
+ECHO              [-domain_type ^<domain_type^>]
+ECHO              [-java_home ^<java_home^>]
+ECHO              [-archive_file ^<archive_file^>]
+ECHO              [-variable_file ^<variable_file^>]
+ECHO              [-passphrase_env ^<passphrase_env^>]
+ECHO              [-passphrase_file ^<passphrase_file^>]
+ECHO              [-passphrase_prompt]
+ECHO              [-opss_wallet] ^<opss_wallet_file^>]
+ECHO              [-opss_wallet_passphrase_env ^<opss_wallet_passphrase_env^>]
+ECHO              [-opss_wallet_passphrase_file ^<opss_wallet_passphrase_file^>]
+ECHO              [-wlst_path ^<wlst_path^>]
+ECHO.
+ECHO     where:
+ECHO         oracle_home     - the existing Oracle Home directory for the domain.
+ECHO                           This argument is required unless the ORACLE_HOME
+ECHO                           environment variable is set.
+ECHO.
+ECHO         model_file      - the location of the model file to use.  This can also
+ECHO                           be specified as a comma-separated list of model
+ECHO                           locations, where each successive model layers on top
+ECHO                           of the previous ones.  This argument is required.
+ECHO.
+ECHO         domain_parent   - the parent directory where the domain should be
+ECHO                           created. The domain name from the model will be
+ECHO                           appended to this location to become the domain home.
+ECHO                           This argument is required unless -domain_home is
+ECHO                           provided.
+ECHO.
+ECHO         domain_home     - the full directory where the domain should be created.
+ECHO                           This is used in cases where the domain name is
+ECHO                           different from the domain home directory name.  This
+ECHO                           argument is required unless -domain_parent is
+ECHO                           provided.
+ECHO.
+ECHO         domain_type     - the type of domain (e.g., WLS, JRF).  This controls
+ECHO                           the domain templates and template resource targeting.
+ECHO                           Also used to locate wlst.cmd if -wlst_path not
+ECHO                           specified. If not specified, the default domain type
+ECHO                           is WLS.
+ECHO.
+ECHO         java_home       - the Java Home to use for the new domain.  If not
+ECHO                           specified, it defaults to the value of the JAVA_HOME
+ECHO                           environment variable.
+ECHO.
+ECHO         archive_file    - the path to the archive file to use.  This can also
+ECHO                           be specified as a comma-separated list of archive
+ECHO                           files.  The overlapping contents in each archive take
+ECHO                           precedence over previous archives in the list.
+ECHO.
+ECHO         variable_file   - the location of the property file containing the
+ECHO                           values for variables used in the model. This can also
+ECHO                           be specified as a comma-separated list of property
+ECHO                           files, where each successive set of properties layers
+ECHO                           on top of the previous ones.
+ECHO.
+ECHO         passphrase_env  - An alternative to entering the encryption passphrase
+ECHO                           at a prompt. The value is an ENVIRONMENT VARIABLE name
+ECHO                           that WDT will use to retrieve the passphrase.
+ECHO.
+ECHO         passphrase_file - An alternative to entering the encryption passphrase
+ECHO                           at a prompt. The value is the name of a file with a
+ECHO                           string value which WDT will read to retrieve the
+ECHO                           passphrase.
+ECHO.
+ECHO         opss_wallet_file - The path to the Oracle wallet containing the domain
+ECHO                            encryption key to use to reconnect the new domain to
+ECHO                            the existing RCU schemas.
+ECHO.
+ECHO         opss_wallet_passphrase_env  - An alternative to entering the OPSS
+ECHO                           wallet passphrase at a prompt. The value is an
+ECHO                           ENVIRONMENT VARIABLE name that WDT will use to
+ECHO                           retrieve the passphrase.
+ECHO.
+ECHO         opss_wallet_passphrase_file - An alternative to entering the OPSS
+ECHO                           wallet passphrase at a prompt. The value is the name
+ECHO                           of a file with a string value which WDT will read to
+ECHO                           retrieve the passphrase.
+ECHO.
+ECHO         wlst_path       - the Oracle Home subdirectory of the wlst.cmd
+ECHO                           script to use (e.g., ^<ORACLE_HOME^>\soa).
+ECHO.
+ECHO    The -run_rcu switch tells the program to run RCU to create the database
+ECHO    schemas specified by the domain type using the specified RCU prefix.
+ECHO    Running RCU will drop any existing schemas with the same RCU prefix
+ECHO    if they exist prior to trying to create them so be forewarned.
+ECHO.
+
+:exit_script
+IF DEFINED USE_CMD_EXIT (
+  EXIT %RETURN_CODE%
+) ELSE (
+  EXIT /B %RETURN_CODE%
+)
+
+ENDLOCAL

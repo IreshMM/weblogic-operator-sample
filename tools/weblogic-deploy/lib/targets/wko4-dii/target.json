@@ -1,0 +1,16 @@
+{
+  "model_filters" : {
+        "discover": [
+          { "id": "wko_filter" }
+        ]
+  },
+  "final_filters" : [
+    { "id": "wko_final_filter" }
+  ],
+  "variable_injectors" : ["port", "host", "url"],
+  "validation_method" : "lax",
+  "domain_home_source_type" : "dii",
+  "exclude_domain_bin_contents": true,
+  "product_version" : "v4",
+  "additional_output" : "wko-domain.yaml"
+}

@@ -1,0 +1,19 @@
+{
+  "model_filters" : {
+        "discover": [
+          { "name": "wko_prep", "path": "@@TARGET_CONFIG_DIR@@/wko_operator_filter.py" },
+          { "id": "wko_filter" }
+        ]
+  },
+  "final_filters" : [
+    { "id": "wko3_final_filter" }
+  ],
+  "variable_injectors" : ["port", "host", "url"],
+  "validation_method" : "lax",
+  "domain_home_source_type" : "mii",
+  "credentials_method" : "secrets",
+  "exclude_domain_bin_contents": true,
+  "wls_credentials_name" : "__weblogic-credentials__",
+  "additional_secrets": "runtime-encryption-secret",
+  "additional_output" : "wko-domain.yaml"
+}

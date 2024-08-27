@@ -1,0 +1,6 @@
+{
+	"injectors": [
+		"topology",
+		"custom"
+	]
+}
