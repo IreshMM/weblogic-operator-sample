@@ -1,0 +1,9 @@
+kubernetes:
+  namespaces:
+  - traefik
+  - weblogic-sample
+ports:
+  web:
+    nodePort: 30305
+  websecure:
+    nodePort: 30443
