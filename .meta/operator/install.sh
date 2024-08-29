@@ -12,7 +12,7 @@ function install_operator() {
 }
 
 function main() {
-    create_ns
+    create_ns_with_sa
     install_operator
 }
 
