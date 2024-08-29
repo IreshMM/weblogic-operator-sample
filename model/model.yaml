@@ -1,31 +1,47 @@
 domainInfo:
     AdminUserName: '@@SECRET:__weblogic-credentials__:username@@'
     AdminPassword: '@@SECRET:__weblogic-credentials__:password@@'
+    ServerStartMode: 'prod'
+
 topology:
-    Name: sample-domain1
-    AdminServerName: admin-server
-    DomainVersion: 12.2.1.4.0
+    Name: '@@ENV:CUSTOM_DOMAIN_NAME@@'
+    AdminServerName: 'admin-server'
     Cluster:
-        cluster-1:
+        'cluster-1':
             DynamicServers:
-                ServerNamePrefix: managed-server
+                ServerTemplate:  'cluster-1-template'
+                ServerNamePrefix: 'managed-server'
+                DynamicClusterSize: '@@PROP:CLUSTER_SIZE@@'
+                MaxDynamicClusterSize: '@@PROP:CLUSTER_SIZE@@'
+                MinDynamicClusterSize: '0'
                 CalculatedListenPorts: false
-                MaximumDynamicServerCount: 5
-                ServerTemplate: server-template_1
-                DynamicClusterSize: 5
     Server:
-        admin-server: {}
+        'admin-server':
+            ListenPort: 7001
     ServerTemplate:
-        server-template_1:
-            ListenPort: '@@PROP:ServerTemp.server-template_1.ListenPort@@'
-            Cluster: cluster-1
-            JTAMigratableTarget:
-                Cluster: cluster-1
-            SSL:
-                ListenPort: '@@PROP:ServerTemp.server-template_1.SSL.ListenPort@@'
+        'cluster-1-template':
+            Cluster: 'cluster-1'
+            ListenPort: 8001
+
 appDeployments:
     Application:
-        quickstart:
-            SourcePath: wlsdeploy/applications/quickstart
-            ModuleType: war
-            Target: cluster-1
+        myapp:
+            SourcePath: 'wlsdeploy/applications/myapp-v1'
+            ModuleType: ear
+            Target: 'cluster-1'
+
+resources:
+  SelfTuning:
+    MinThreadsConstraint:
+      SampleMinThreads:
+        Target: 'cluster-1'
+        Count: 1
+    MaxThreadsConstraint:
+      SampleMaxThreads:
+        Target: 'cluster-1'
+        Count: 10
+    WorkManager:
+      SampleWM:
+        Target: 'cluster-1'
+        MinThreadsConstraint: 'SampleMinThreads'
+        MaxThreadsConstraint: 'SampleMaxThreads'
