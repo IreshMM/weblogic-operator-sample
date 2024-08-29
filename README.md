@@ -9,6 +9,15 @@ source env.sh
 > [!NOTE]
 > This step is only requred if you haven't done that already on the same cluster
 
+```bash
+cd .meta/operator
+./install.sh
+```
+```bash
+cd .meta/traefik
+./install.sh
+```
+
 ## Create namespace
 ```bash
 # ekapply is a shell function defined in utils/functions-aliases.sh
