@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 
+set -a
 source .env
+set +a
 
-alias it=$PWD/tools/imagetool/bin/imagetool.sh
-alias ah=$PWD/tools/weblogic-deploy/bin/archiveHelper.sh
-wdt=$PWD/tools/weblogic-deploy.zip
+source utils/functions-aliases.sh
 
 docker login -u $OCR_USERNAME -p $OCR_TOKEN $OCR_SERVER
+
+it cache deleteEntry --key wdt_latest
+it cache addInstaller --type wdt --version latest --path $wdt

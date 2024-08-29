@@ -1,0 +1,6 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ${SAMPLE_NS}
+  labels:
+    weblogic-operator: enabled
