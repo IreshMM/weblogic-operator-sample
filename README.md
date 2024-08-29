@@ -43,3 +43,11 @@ utils/create-aux-image.sh
 ```bash
 utils/create-domain.sh
 ```
+
+# Contains licensed content from oracle:
+- [Weblogic Kubernetes Operator Docs](https://oracle.github.io/weblogic-kubernetes-operator/)
+- [Weblogic Kubernetes Operator Source](https://github.com/oracle/weblogic-kubernetes-operator)
+- [Weblogic Deploy Tooling](https://oracle.github.io/weblogic-deploy-tooling)
+- [Weblogic Deploy Tooling Source](https://github.com/oracle/weblogic-deploy-tooling)
+
+Please consult the respective sources for licensing information.
