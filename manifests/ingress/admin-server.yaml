@@ -1,10 +1,10 @@
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
-  name: traefik-ingress-sample-domain1-admin-server
-  namespace: sample-domain1-ns
+  name: ${WEBLOGIC_DOMAIN_NAME}-admin-server
+  namespace: ${SAMPLE_NS}
   labels:
-    weblogic.domainUID: sample-domain1
+    weblogic.domainUID: ${WEBLOGIC_DOMAIN_UID}
   annotations:
     kubernetes.io/ingress.class: traefik
 spec:
@@ -13,5 +13,5 @@ spec:
     match: PathPrefix(`/console`)
     services:
     - kind: Service
-      name: sample-domain1-admin-server
+      name: "${WEBLOGIC_DOMAIN_NAME}-admin-server"
       port: 7001

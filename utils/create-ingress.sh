@@ -7,3 +7,4 @@ set +a
 source utils/functions-aliases.sh
 
 ekapply manifests/ingress/domain1-cluster-cluster-1.yaml
+ekapply manifests/ingress/admin-server.yaml
