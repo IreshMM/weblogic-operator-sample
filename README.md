@@ -49,6 +49,13 @@ utils/create-domain.sh
 utils/create-ingress.sh
 ```
 
+## Test
+```bash
+CLUSTER_LB_IP=$(kubectl get svc traefik -n traefik -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+CLUSTER_LB_PORT=$(kubectl get svc traefik -n traefik -o 'jsonpath={.spec.ports[?(@.name=="web")].port}')
+curl $CLUSTER_LB_IP:$CLUSTER_LB_PORT/myapp_war/index.jsp -H 'host: weblogic-domain.weblogic-sample.sample'
+```
+
 # Contains licensed content from oracle:
 - [Weblogic Kubernetes Operator Docs](https://oracle.github.io/weblogic-kubernetes-operator/)
 - [Weblogic Kubernetes Operator Source](https://github.com/oracle/weblogic-kubernetes-operator)
