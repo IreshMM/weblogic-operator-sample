@@ -21,7 +21,7 @@ cd .meta/traefik
 ## Create namespace
 ```bash
 # ekapply is a shell function defined in utils/functions-aliases.sh
-ekapply namespace.yaml
+ekapply manifests/namespace.yaml
 ```
 
 ## Create secrets
