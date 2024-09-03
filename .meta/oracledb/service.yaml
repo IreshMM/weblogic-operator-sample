@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oracle-db
+  namespace: oracle-db
+spec:
+  ports:
+  - name: tns
+    port: 1521
+    protocol: TCP
+    targetPort: 1521
+  selector:
+    app.kubernetes.io/instance: dev
+    app.kubernetes.io/name: oracle-db
+  sessionAffinity: None
+  type: ClusterIP
