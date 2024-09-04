@@ -1,4 +1,4 @@
-# Instructions
+# Initial Phase
 ## Prepare environment
 1. Set values in .env
 1. Source env.sh
@@ -54,6 +54,14 @@ utils/create-ingress.sh
 CLUSTER_LB_IP=$(kubectl get svc traefik -n traefik -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 CLUSTER_LB_PORT=$(kubectl get svc traefik -n traefik -o 'jsonpath={.spec.ports[?(@.name=="web")].port}')
 curl $CLUSTER_LB_IP:$CLUSTER_LB_PORT/myapp_war/index.jsp -H 'host: weblogic-domain.weblogic-sample.sample'
+```
+
+# Update 1
+
+##  Create oracle DB instance
+```bash
+cd .meta/oracle-db
+./install.sh
 ```
 
 # Contains licensed content from oracle:
