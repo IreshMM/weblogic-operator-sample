@@ -79,6 +79,12 @@ utils/create-model-configmap.sh
 utils/apply-domain.sh
 ```
 
+## Roll the domain
+```bash
+# Applying after patching the domain restartVersion
+utils/roll-domain.sh
+```
+
 # Contains licensed content from oracle:
 - [Weblogic Kubernetes Operator Docs](https://oracle.github.io/weblogic-kubernetes-operator/)
 - [Weblogic Kubernetes Operator Source](https://github.com/oracle/weblogic-kubernetes-operator)

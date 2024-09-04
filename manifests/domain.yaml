@@ -32,7 +32,7 @@ spec:
   replicas: 1
   clusters:
   - name: ${WEBLOGIC_CLUSTER_NAME}
-  restartVersion: '1'
+  restartVersion: '2'
   introspectVersion: '1'
   configuration:
     model:
