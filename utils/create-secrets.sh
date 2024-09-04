@@ -15,3 +15,11 @@ kubectl label -n $SAMPLE_NS secret $WEBLOGIC_CRED_SECRET_NAME weblogic.domainUID
 kubectl create -n $SAMPLE_NS secret generic $WEBLOGIC_DOMAIN_RUNTIME_ENC_SECRET_NAME \
     --from-literal=password=$WEBLOGIC_DOMAIN_RUNTIME_ENC_SECRET
 kubectl label -n $SAMPLE_NS secret $WEBLOGIC_DOMAIN_RUNTIME_ENC_SECRET_NAME weblogic.domainUID=$WEBLOGIC_DOMAIN_UID
+
+kubectl create -n $SAMPLE_NS secret generic $ORACLE_DS_CONN_SECRET_NAME \
+    --from-literal='user=sys as sysdba' \
+    --from-literal='password=incorrect_password' \
+    --from-literal='max-capacity=1' \
+    --from-literal='url=jdbc:oracle:thin:@oracle-db.oracle-db.svc.cluster.local:1521/devpdb.k8s'
+
+kubectl label -n $SAMPLE_NS secret $ORACLE_DS_CONN_SECRET_NAME weblogic.domainUID=$WEBLOGIC_DOMAIN_UID

@@ -64,6 +64,17 @@ cd .meta/oracle-db
 ./install.sh
 ```
 
+## Create new secrets
+```bash
+utils/create-secrets.sh
+```
+
+## Create new model ConfigMap
+```bash
+utils/create-model-configmap.sh
+```
+
+
 # Contains licensed content from oracle:
 - [Weblogic Kubernetes Operator Docs](https://oracle.github.io/weblogic-kubernetes-operator/)
 - [Weblogic Kubernetes Operator Source](https://github.com/oracle/weblogic-kubernetes-operator)
