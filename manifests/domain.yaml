@@ -40,3 +40,6 @@ spec:
       auxiliaryImages:
         - image: "${AUX_IMAGE_REPO}:${AUX_IMAGE_TAG}"
       runtimeEncryptionSecret: ${WEBLOGIC_DOMAIN_RUNTIME_ENC_SECRET_NAME}
+      configMap: "${WEBLOGIC_MODEL_CONFIGMAP_NAME}"
+    secrets:
+      - "${ORACLE_DS_CONN_SECRET_NAME}"

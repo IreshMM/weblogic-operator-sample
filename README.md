@@ -74,6 +74,10 @@ utils/create-secrets.sh
 utils/create-model-configmap.sh
 ```
 
+## Apply new changes to the domain
+```bash
+utils/apply-domain.sh
+```
 
 # Contains licensed content from oracle:
 - [Weblogic Kubernetes Operator Docs](https://oracle.github.io/weblogic-kubernetes-operator/)
